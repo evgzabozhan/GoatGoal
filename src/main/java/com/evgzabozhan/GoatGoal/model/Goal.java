@@ -16,6 +16,14 @@ public class Goal {
     private String description;
     private double percent;
 
+    public Goal(){
+    }
+
+    public Goal(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public Long getId() {
         return id;
     }
