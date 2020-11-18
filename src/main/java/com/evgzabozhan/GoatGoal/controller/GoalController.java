@@ -38,12 +38,47 @@ public class GoalController {
     }
 
     @GetMapping("/goal/{id}")
-    public String goalInfo(@PathVariable(value = "id") long id, Model model){
-        System.out.println(id);
-       Optional<Goal> goal =  goalRepository.findById(id);
+    public String goalInfo(@PathVariable(value = "id") long id, Model model) {
+        if (!goalRepository.existsById(id)) {
+            return "redirect:/goal";
+        }
+
+        Optional<Goal> goal = goalRepository.findById(id);
         ArrayList<Goal> result = new ArrayList<>();
         goal.ifPresent(result::add);
-       model.addAttribute("goal", result);
-       return "goal/goal-info";
+        model.addAttribute("goal", result);
+        return "goal/goal-info";
+    }
+
+    @GetMapping("/goal/{id}/edit")
+    public String goalEdit(@PathVariable(value = "id") long id, Model model){
+        if (!goalRepository.existsById(id)) {
+            return "redirect:/goal";
+        }
+
+        Optional<Goal> goal = goalRepository.findById(id);
+        ArrayList<Goal> result = new ArrayList<>();
+        goal.ifPresent(result::add);
+        model.addAttribute("goal", result);
+        return "goal/goal-edit";
+    }
+
+    @PostMapping("/goal/{id}/edit")
+    public String postGoalUpdate(@PathVariable(value = "id") long id,
+                                 @RequestParam String name,
+                                 @RequestParam String description,
+                                 Model model){
+        Goal goal = goalRepository.findById(id).orElseThrow();
+        goal.setName(name);
+        goal.setDescription(description);
+        goalRepository.save(goal);
+        return "redirect:/goal";
+    }
+
+    @PostMapping("/goal/{id}/remove")
+    public String postGoalRemove(@PathVariable(value = "id") long id, Model model){
+        Goal goal = goalRepository.findById(id).orElseThrow();
+        goalRepository.delete(goal);
+        return "redirect:/goal";
     }
 }

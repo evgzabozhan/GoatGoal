@@ -14,7 +14,9 @@
         <p th:text="${el.description}"></p>
         <p th:text="${el.percent}"></p>
         <a th:href="'/goal/' + ${el.id} + '/edit'" class="btn btn-warning">Edit goal</a>
-        <a th:href="'/goal/' + ${el.id} + '/remove'" class="btn btn-warning">Remove goal</a>
+        <form th:action="'/goal/' + ${el.id} + '/remove'" method="post"><br>
+            <button class="btn btn-warning">Remove goal</button>
+        </form>
     </div>
 </div>
 
