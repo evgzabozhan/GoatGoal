@@ -18,4 +18,10 @@ public class MainController {
         model.addAttribute("about","information");
         return "about";
     }
+
+    @GetMapping("/error")
+    public String error(Model model){
+        model.addAttribute("title","Error page");
+        return "error";
+    }
 }
