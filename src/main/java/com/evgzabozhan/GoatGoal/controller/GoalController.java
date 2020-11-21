@@ -3,6 +3,7 @@ package com.evgzabozhan.GoatGoal.controller;
 import com.evgzabozhan.GoatGoal.model.Goal;
 import com.evgzabozhan.GoatGoal.model.User;
 import com.evgzabozhan.GoatGoal.repository.GoalRepository;
+import com.evgzabozhan.GoatGoal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.*;
 
 @Controller
@@ -20,9 +22,13 @@ public class GoalController {
     @Autowired
     private GoalRepository goalRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/goal")
-    public String goal(Model model){
+    public String goal(Principal principal,Model model){
         Iterable<Goal> goals = goalRepository.findAll();
+
         model.addAttribute("goals",goals);
         return "goal/goal-main";
     }
