@@ -1,8 +1,10 @@
 package com.evgzabozhan.GoatGoal.controller;
 
 import com.evgzabozhan.GoatGoal.model.Goal;
+import com.evgzabozhan.GoatGoal.model.User;
 import com.evgzabozhan.GoatGoal.repository.GoalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +29,17 @@ public class GoalController {
 
     @GetMapping("/goal/add")
     public String getGoalAdd(Model model){
-        return "/goal/goal-add";
+        return "goal/goal-add";
     }
 
     @PostMapping("/goal/add")
-    public String postGoalAdd(@RequestParam String name, @RequestParam String description, Model model){
-        Goal goal = new Goal(name,description);
+    public String postGoalAdd(@AuthenticationPrincipal User user,
+                              @RequestParam String name,
+                              @RequestParam String description, Model model){
+
+        Goal goal = new Goal(name,description,user);
         goalRepository.save(goal);
+        model.addAttribute("message",user.getUsername());
         return "redirect:/goal";
     }
 
