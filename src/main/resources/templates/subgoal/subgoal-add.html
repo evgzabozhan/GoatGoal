@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Goals</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<header th:insert="blocks/header :: header"></header>
+
+<div class="container mt-5 mb-5">
+    <h1>Your Sub Goal</h1>
+    <form action="/goal/subgoal/add" method="post">
+        <input type="text" name="name" placeholder="Write your goal name" class="form-control"><br>
+        <textarea type="text" name="description" placeholder="Write your goal description" class="form-control"></textarea><br>
+        <textarea type="text" name="id" placeholder="Write your goal description" class="form-control"></textarea><br>
+        <button type="submit" class="btn btn-success">Add SubGoal</button>
+    </form>
+</div>
+
+<div th:insert="blocks/footer :: footer"></div>
+
+</body>
+</html>
