@@ -1,8 +1,10 @@
 package com.evgzabozhan.GoatGoal.controller;
 
 import com.evgzabozhan.GoatGoal.model.Goal;
+import com.evgzabozhan.GoatGoal.model.SubGoal;
 import com.evgzabozhan.GoatGoal.model.User;
 import com.evgzabozhan.GoatGoal.repository.GoalRepository;
+import com.evgzabozhan.GoatGoal.repository.SubGoalRepository;
 import com.evgzabozhan.GoatGoal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +25,11 @@ public class GoalController {
     private GoalRepository goalRepository;
 
     @Autowired
+    private SubGoalRepository subGoalRepository;
+
+    @Autowired
     private UserRepository userRepository;
+
 
     @GetMapping("/goal")
     public String goal(Principal principal,Model model){
@@ -58,7 +64,10 @@ public class GoalController {
         Optional<Goal> goal = goalRepository.findById(id);
         ArrayList<Goal> result = new ArrayList<>();
         goal.ifPresent(result::add);
+        Iterable<SubGoal> subGoal = subGoalRepository.findAll();
+
         model.addAttribute("goal", result);
+        model.addAttribute("subGoal",subGoal);
         return "goal/goal-info";
     }
 
