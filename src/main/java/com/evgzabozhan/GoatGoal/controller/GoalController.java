@@ -64,10 +64,20 @@ public class GoalController {
         Optional<Goal> goal = goalRepository.findById(id);
         ArrayList<Goal> result = new ArrayList<>();
         goal.ifPresent(result::add);
+
         Iterable<SubGoal> subGoal = subGoalRepository.findAll();
+        ArrayList<SubGoal> subGoals = new ArrayList<>();
+
+        //How refactor this?
+        for(SubGoal sub : subGoal){
+            if(sub.getParentGoal().getId().equals(id)){
+                subGoals.add(sub);
+            }
+        }
+        //How refactor this?
 
         model.addAttribute("goal", result);
-        model.addAttribute("subGoal",subGoal);
+        model.addAttribute("subGoal",subGoals);
         return "goal/goal-info";
     }
 

@@ -26,22 +26,23 @@ public class SubGoalController {
     @Autowired
     private SubGoalRepository subGoalRepository;
 
-    @GetMapping("/goal/subgoal/add")
-    public String getGoalAdd(Model model){
+    @GetMapping("/goal/{id}/subgoal/add")
+    public String getGoalAdd(@PathVariable (value = "id") Long id, Model model){
+        model.addAttribute("goalId", id);
         return "subgoal/subgoal-add";
     }
 
-    @PostMapping("/goal/subgoal/add")
+    @PostMapping("/goal/{id}/subgoal/add")
     public String postSubGoalAdd(@RequestParam String name,
                               @RequestParam String description,
-                                 @RequestParam Long id, Model model) {
+                                 @PathVariable(value = "id") Long id, Model model) {
 
         Goal goal = goalRepository.findById(id).orElseThrow();
 
         SubGoal subGoal = new SubGoal(name,description,goal);
         subGoalRepository.save(subGoal);
 
-        return "redirect:/goal/{id}";
+        return "redirect:/goal/" + id;
     }
 
     @PostMapping("/goal/subgoal/{id}/edit")

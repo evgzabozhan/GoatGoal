@@ -13,7 +13,7 @@
         <h3 th:text="${el.name}"></h3>
         <p th:text="${el.description}"></p>
         <p th:text="${el.percent}"></p>
-        <a th:href="'/goal/subgoal/add'" class="btn btn-warning">Add SubGoal</a>
+        <a th:href="'/goal/' + ${el.id} + '/subgoal/add'" class="btn btn-warning">Add SubGoal</a>
         <a th:href="'/goal/' + ${el.id} + '/edit'" class="btn btn-warning">Edit goal</a>
         <form th:action="'/goal/' + ${el.id} + '/remove'" method="post"><br>
             <button class="btn btn-warning">Remove goal</button>
