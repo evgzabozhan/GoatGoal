@@ -33,9 +33,17 @@ public class GoalController {
 
     @GetMapping("/goal")
     public String goal(Principal principal,Model model){
+        User user = userRepository.findByUsername(principal.getName());
         Iterable<Goal> goals = goalRepository.findAll();
+        List<Goal> userGoals = new ArrayList<>();
 
-        model.addAttribute("goals",goals);
+        for(Goal goal : goals){
+            if(goal.getAuthor().getId().equals(user.getId())){
+                userGoals.add(goal);
+            }
+        }
+
+        model.addAttribute("goals",userGoals);
         return "goal/goal-main";
     }
 
@@ -109,6 +117,18 @@ public class GoalController {
     @PostMapping("/goal/{id}/remove")
     public String postGoalRemove(@PathVariable(value = "id") long id, Model model){
         Goal goal = goalRepository.findById(id).orElseThrow();
+
+        //If remove goal, removed all sub-goals for this goal
+
+        //remove all sub-goals
+        Iterable<SubGoal> subGoals = subGoalRepository.findAll();
+        for(SubGoal subGoal : subGoals){
+            if (goal.getId().equals(subGoal.getParentGoal().getId())){
+                subGoalRepository.delete(subGoal);
+            }
+        }
+
+        //remove goal
         goalRepository.delete(goal);
         return "redirect:/goal";
     }
