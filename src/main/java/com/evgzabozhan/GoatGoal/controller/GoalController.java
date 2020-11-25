@@ -47,18 +47,17 @@ public class GoalController {
         return "goal/goal-main";
     }
 
-    private void goalPercent(Long id){
+    private void goalPercent(Long id, Iterable<SubGoal> subGoal){
         System.out.println("It's start " + id);
         double count = 0;
         double doneCount = 0;
-        Iterable<SubGoal> subGoal = subGoalRepository.findAll();
-        ArrayList<SubGoal> subGoals = new ArrayList<>();
+       // Iterable<SubGoal> subGoal = subGoalRepository.findAll();
 
         //How refactor this?
-        for(SubGoal sub : subGoal){
-            if(sub.getParentGoal().getId().equals(id)){
+        for(SubGoal sub : subGoal) {
+            if (sub.getParentGoal().getId().equals(id)) {
                 count++;
-                if(!sub.isActive()){
+                if (!sub.isActive()) {
                     doneCount++;
                 }
             }
@@ -66,8 +65,11 @@ public class GoalController {
 
         double result = (100/count) * doneCount;
 
+        System.out.println(result);
+
         Goal goal = goalRepository.findById(id).orElseThrow();
         goal.setPercent(result);
+
         goalRepository.save(goal);
 
     }
@@ -90,16 +92,10 @@ public class GoalController {
 
     @GetMapping("/goal/{id}")
     public String goalInfo(@PathVariable(value = "id") long id, Model model) {
+
         if (!goalRepository.existsById(id)) {
             return "redirect:/goal";
         }
-
-        // Error SQL
-        goalPercent(id);
-
-        Optional<Goal> goal = goalRepository.findById(id);
-        ArrayList<Goal> result = new ArrayList<>();
-        goal.ifPresent(result::add);
 
         Iterable<SubGoal> subGoal = subGoalRepository.findAll();
         ArrayList<SubGoal> subGoals = new ArrayList<>();
@@ -110,7 +106,15 @@ public class GoalController {
                 subGoals.add(sub);
             }
         }
-        //How refactor this?
+
+        if(subGoals.size() > 0) {
+            goalPercent(id, subGoal);
+        }
+
+        Optional<Goal> goal = goalRepository.findById(id);
+        ArrayList<Goal> result = new ArrayList<>();
+        goal.ifPresent(result::add);
+
 
         model.addAttribute("goal", result);
         model.addAttribute("subGoal",subGoals);
