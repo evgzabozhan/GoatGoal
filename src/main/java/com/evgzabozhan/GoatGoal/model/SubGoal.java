@@ -11,6 +11,7 @@ public class SubGoal {
 
     private String name;
     private String description;
+    private boolean isActive;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "goal_id")
@@ -20,10 +21,19 @@ public class SubGoal {
 
     }
 
-    public SubGoal(String name, String description, Goal parentGoal) {
+    public SubGoal(String name, String description, Goal parentGoal,boolean isActive) {
         this.name = name;
         this.description = description;
         this.parentGoal = parentGoal;
+        this.isActive = isActive;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Long getId() {

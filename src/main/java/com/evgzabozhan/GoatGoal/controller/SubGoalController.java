@@ -2,11 +2,9 @@ package com.evgzabozhan.GoatGoal.controller;
 
 import com.evgzabozhan.GoatGoal.model.Goal;
 import com.evgzabozhan.GoatGoal.model.SubGoal;
-import com.evgzabozhan.GoatGoal.model.User;
 import com.evgzabozhan.GoatGoal.repository.GoalRepository;
 import com.evgzabozhan.GoatGoal.repository.SubGoalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +37,7 @@ public class SubGoalController {
 
         Goal goal = goalRepository.findById(id).orElseThrow();
 
-        SubGoal subGoal = new SubGoal(name,description,goal);
+        SubGoal subGoal = new SubGoal(name,description,goal,true);
         subGoalRepository.save(subGoal);
 
         return "redirect:/goal/" + id;
@@ -55,6 +53,15 @@ public class SubGoalController {
         subGoal.setDescription(description);
         subGoalRepository.save(subGoal);
         return "redirect:/goal/{id}";
+    }
+
+    @PostMapping("/goal/subgoal/{id}/done")
+    public String postSubGoalDone(@PathVariable(value = "id")Long id){
+        SubGoal subGoal = subGoalRepository.findById(id).orElseThrow();
+        subGoal.setActive(false);
+        subGoalRepository.save(subGoal);
+
+        return "redirect:/goal";
     }
 
     @PostMapping("/goal/subgoal/{id}/remove")

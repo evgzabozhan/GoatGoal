@@ -21,6 +21,7 @@
         <div th:each="sub : ${subGoal}" class="alert alert-info mt-2">
             <h3 th:text="${sub.name}"></h3>
             <p th:text="${sub.description}"></p>
+            <p th:text="${sub.active} ? 'ACTIVE' : 'DONE'"></p>
             <a th:href="'/goal/subgoal/' + ${sub.id} + '/edit'" class="btn btn-warning">Edit Sub Goal</a>
             <form th:action="'/goal/subgoal/' + ${sub.id} + '/remove'" method="post"><br>
                 <button class="btn btn-warning">Remove Sub Goal</button>

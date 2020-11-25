@@ -47,6 +47,31 @@ public class GoalController {
         return "goal/goal-main";
     }
 
+    private void goalPercent(Long id){
+        System.out.println("It's start " + id);
+        double count = 0;
+        double doneCount = 0;
+        Iterable<SubGoal> subGoal = subGoalRepository.findAll();
+        ArrayList<SubGoal> subGoals = new ArrayList<>();
+
+        //How refactor this?
+        for(SubGoal sub : subGoal){
+            if(sub.getParentGoal().getId().equals(id)){
+                count++;
+                if(!sub.isActive()){
+                    doneCount++;
+                }
+            }
+        }
+
+        double result = (100/count) * doneCount;
+
+        Goal goal = goalRepository.findById(id).orElseThrow();
+        goal.setPercent(result);
+        goalRepository.save(goal);
+
+    }
+
     @GetMapping("/goal/add")
     public String getGoalAdd(Model model){
         return "goal/goal-add";
@@ -68,6 +93,9 @@ public class GoalController {
         if (!goalRepository.existsById(id)) {
             return "redirect:/goal";
         }
+
+        // Error SQL
+        goalPercent(id);
 
         Optional<Goal> goal = goalRepository.findById(id);
         ArrayList<Goal> result = new ArrayList<>();
