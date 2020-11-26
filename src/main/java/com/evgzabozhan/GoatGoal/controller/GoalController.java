@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 @Controller
 public class GoalController {
@@ -34,14 +39,11 @@ public class GoalController {
     @GetMapping("/goal")
     public String goal(Principal principal,Model model){
         User user = userRepository.findByUsername(principal.getName());
-        Iterable<Goal> goals = goalRepository.findAll();
-        List<Goal> userGoals = new ArrayList<>();
 
-        for(Goal goal : goals){
-            if(goal.getAuthor().getId().equals(user.getId())){
-                userGoals.add(goal);
-            }
-        }
+        List<Goal> userGoals = StreamSupport
+                .stream(goalRepository.findAll().spliterator(),false)
+                .filter(goal -> goal.getAuthor().getId().equals(user.getId()))
+                .collect(Collectors.toList());
 
         model.addAttribute("goals",userGoals);
         return "goal/goal-main";
@@ -98,23 +100,19 @@ public class GoalController {
         }
 
         Iterable<SubGoal> subGoal = subGoalRepository.findAll();
-        ArrayList<SubGoal> subGoals = new ArrayList<>();
+        List<SubGoal> subGoals = StreamSupport
+                .stream(subGoal.spliterator(),false)
+                .filter(sub -> sub.getParentGoal().getId().equals(id))
+                .collect(Collectors.toList());
 
-        //How refactor this?
-        for(SubGoal sub : subGoal){
-            if(sub.getParentGoal().getId().equals(id)){
-                subGoals.add(sub);
-            }
-        }
 
         if(subGoals.size() > 0) {
             goalPercent(id, subGoal);
         }
 
-        Optional<Goal> goal = goalRepository.findById(id);
-        ArrayList<Goal> result = new ArrayList<>();
-        goal.ifPresent(result::add);
-
+        List<Goal> result = goalRepository.findById(id)
+                .map(Collections::singletonList)
+                .orElse(emptyList());
 
         model.addAttribute("goal", result);
         model.addAttribute("subGoal",subGoals);
