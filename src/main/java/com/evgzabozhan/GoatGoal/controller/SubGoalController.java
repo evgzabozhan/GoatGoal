@@ -55,10 +55,12 @@ public class SubGoalController {
         return "redirect:/goal/{id}";
     }
 
-    @PostMapping("/goal/subgoal/{id}/done")
-    public String postSubGoalDone(@PathVariable(value = "id")Long id){
+    @PostMapping("/goal/subgoal/{id}/status")
+    public String postSubGoalDone(@PathVariable(value = "id")Long id,
+                                  @RequestParam(value = "status") String status){
+        System.out.println(status);
         SubGoal subGoal = subGoalRepository.findById(id).orElseThrow();
-        subGoal.setActive(false);
+        subGoal.setActive(!status.equals("active"));
         subGoalRepository.save(subGoal);
 
         return "redirect:/goal";
