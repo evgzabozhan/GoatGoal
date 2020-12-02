@@ -6,6 +6,14 @@ import com.evgzabozhan.GoatGoal.model.User;
 import com.evgzabozhan.GoatGoal.repository.GoalRepository;
 import com.evgzabozhan.GoatGoal.repository.SubGoalRepository;
 import com.evgzabozhan.GoatGoal.repository.UserRepository;
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import static java.util.Collections.emptyList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,14 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.security.Principal;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 @Controller
 public class GoalController {

@@ -13,24 +13,26 @@
         <h3 th:text="${el.name}"></h3>
         <p th:text="${el.description}"></p>
         <p th:text="${el.percent}"></p>
-        <a th:href="'/goal/' + ${el.id} + '/subgoal/add'" class="btn btn-warning">Add SubGoal</a>
-        <a th:href="'/goal/' + ${el.id} + '/edit'" class="btn btn-warning">Edit goal</a>
+        <div class="btn-group">
         <form th:action="'/goal/' + ${el.id} + '/remove'" method="post"><br>
-            <button class="btn btn-warning">Remove goal</button>
+            <a style="margin:1px;" th:href="'/goal/' + ${el.id} + '/subgoal/add'" class="btn btn-info">Add SubGoal</a>
+            <a style="margin:1px;" th:href="'/goal/' + ${el.id} + '/edit'" class="btn btn-info">Edit</a>
+            <button style="margin:1px;" class="btn btn-danger">Remove</button>
         </form>
+        </div>
         <div th:each="sub : ${subGoal}" class="alert alert-info mt-2">
             <h3 th:text="${sub.name}"></h3>
             <p th:text="${sub.description}"></p>
             <p th:text="${sub.active} ? 'ACTIVE' : 'DONE'" class="btn btn-alert"></p>
+            <div class="btn-group">
             <form th:action="'/goal/subgoal/' + ${sub.id} + '/status'" method="post"><br>
-                <button class="btn btn-warning" th:name="status" th:value ="${sub.active} ? 'active' : 'done'">Change Sub Goal Status</button>
+                <button style="margin:1px;" class="btn btn-info" th:name="status" th:value ="${sub.active} ? 'active' : 'done'">Status</button>
             </form>
-            <br>
-            <a th:href="'/goal/subgoal/' + ${sub.id} + '/edit'" class="btn btn-warning">Edit Sub Goal</a>
-
             <form th:action="'/goal/subgoal/' + ${sub.id} + '/remove'" method="post"><br>
-                <button class="btn btn-warning">Remove Sub Goal</button>
+                <a  style="margin:1px;" th:href="'/goal/subgoal/' + ${sub.id} + '/edit'" class="btn btn-info">Edit</a>
+                <button style="margin:1px;" class="btn btn-danger">Remove</button>
             </form>
+            </div>
         </div>
     </div>
 </div>
